@@ -1,0 +1,193 @@
+.orders-container {
+
+    width:100%;
+
+}
+
+
+
+.orders-grid {
+
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+    margin-top:25px;
+
+}
+
+
+
+.order-card {
+
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    box-shadow:
+
+    0 8px 25px rgba(0,0,0,.08);
+
+
+}
+
+
+
+.order-card img {
+
+
+    width:100%;
+
+    height:200px;
+
+    object-fit:cover;
+
+    border-radius:15px;
+
+}
+
+
+
+.order-details h2 {
+
+
+    color:#14532d;
+
+    margin:15px 0;
+
+}
+
+
+
+.order-details p {
+
+
+    color:#64748b;
+
+    margin:8px 0;
+
+}
+
+
+
+.order-details b {
+
+    color:#166534;
+
+}
+
+
+
+.order-details h3 {
+
+
+    color:#16a34a;
+
+    margin:12px 0;
+
+}
+
+
+
+
+.order-details span {
+
+
+    display:inline-block;
+
+    padding:7px 15px;
+
+    border-radius:20px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+
+
+
+
+.accepted {
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+.rejected {
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+
+
+.delivered {
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
+
+
+
+.pending {
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+
+
+.date {
+
+
+    margin-top:15px !important;
+
+    font-size:13px;
+
+    color:#94a3b8 !important;
+
+}
+
+
+
+
+@media(max-width:1000px){
+
+.orders-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+
+
+@media(max-width:700px){
+
+.orders-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}

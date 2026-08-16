@@ -1,0 +1,302 @@
+/* ===========================
+   Buy Sapling Page
+=========================== */
+
+.buy-container{
+
+    min-height:100vh;
+    background:#f6faf6;
+    padding:40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+
+/* Main Card */
+
+.plant-card{
+
+    width:900px;
+    background:white;
+    border-radius:25px;
+    padding:35px;
+
+    display:flex;
+    gap:40px;
+
+    box-shadow:
+    0 20px 45px rgba(0,0,0,0.08);
+
+    animation:fadeIn .4s ease;
+
+}
+
+
+
+/* Plant Image */
+
+.plant-card img{
+
+    width:380px;
+    height:380px;
+
+    object-fit:cover;
+
+    border-radius:20px;
+
+    background:#e8f5e9;
+
+}
+
+
+
+/* Details Section */
+
+.plant-details{
+
+    flex:1;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
+}
+
+
+.plant-details h1{
+
+    font-size:35px;
+
+    color:#14532d;
+
+    margin-bottom:15px;
+
+}
+
+
+.plant-details h3{
+
+    font-size:16px;
+
+    color:#64748b;
+
+    margin-bottom:15px;
+
+}
+
+
+.plant-details p{
+
+    color:#475569;
+
+    line-height:1.7;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.plant-details h2{
+
+    font-size:30px;
+
+    color:#16a34a;
+
+    margin-bottom:25px;
+
+}
+
+
+
+/* Quantity */
+
+.plant-details label{
+
+    font-weight:600;
+
+    color:#334155;
+
+    margin-bottom:8px;
+
+}
+
+
+
+.plant-details input{
+
+    width:150px;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    border:1px solid #cbd5e1;
+
+    font-size:16px;
+
+    outline:none;
+
+    margin-bottom:20px;
+
+}
+
+
+.plant-details input:focus{
+
+    border-color:#16a34a;
+
+    box-shadow:
+    0 0 8px rgba(22,163,74,.25);
+
+}
+
+
+
+/* Total Amount */
+
+.plant-details h3:last-of-type{
+
+    background:#ecfdf5;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    color:#166534;
+
+    font-size:20px;
+
+}
+
+
+
+/* Button */
+
+.plant-details button{
+
+    margin-top:25px;
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #16a34a,
+    #22c55e
+    );
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+
+.plant-details button:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+
+    0 12px 25px rgba(22,163,74,.3);
+
+}
+
+
+
+/* Animation */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+/* ===========================
+   Responsive
+=========================== */
+
+
+@media(max-width:900px){
+
+
+    .plant-card{
+
+        flex-direction:column;
+
+        width:100%;
+
+    }
+
+
+    .plant-card img{
+
+        width:100%;
+
+        height:300px;
+
+    }
+
+
+}
+
+
+
+@media(max-width:500px){
+
+
+    .buy-container{
+
+        padding:20px;
+
+    }
+
+
+    .plant-card{
+
+        padding:20px;
+
+    }
+
+
+    .plant-details h1{
+
+        font-size:28px;
+
+    }
+
+}

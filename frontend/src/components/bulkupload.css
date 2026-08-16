@@ -1,0 +1,113 @@
+/* ===============================
+   UPLOAD BOX
+================================ */
+
+.upload-section {
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+}
+
+.upload-box {
+
+    background: white;
+    border-radius: 22px;
+    padding: 30px;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.upload-box input[type="file"] {
+
+    flex: 1;
+    min-width: 220px;
+
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+
+}
+
+.upload-btn {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    background: #16a34a;
+    color: white;
+    border: none;
+
+    padding: 12px 24px;
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.upload-btn:hover {
+
+    background: #14532d;
+
+}
+
+
+/* ===============================
+   TABLE
+================================ */
+
+.table-wrap {
+
+    background: white;
+    border-radius: 22px;
+    padding: 20px;
+    overflow-x: auto;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.table-wrap table {
+
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.table-wrap th,
+.table-wrap td {
+
+    text-align: left;
+    padding: 12px 15px;
+    font-size: 14px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+}
+
+.table-wrap th {
+
+    color: #14532d;
+    background: #f0fdf4;
+    font-weight: 600;
+
+}
+
+.table-wrap tr:hover td {
+
+    background: #f8fafc;
+
+}
