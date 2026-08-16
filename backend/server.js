@@ -3,9 +3,10 @@ const multer = require("multer");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const mysql = require("mysql2/promise");
+require("dotenv").config();
 const app = express();
 
-const path = require("path"); 
+const path = require("path");
 
 app.use(cors());
 app.use(express.json());
@@ -16,10 +17,15 @@ let db;
 async function startServer() {
     try {
         db = await mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "omkar@1234",
-            database: "nurserymitra"
+            // host: "localhost",
+            // user: "root",
+            // password: "omkar@1234",
+            // database: "nurserymitra"
+
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME
         });
 
         console.log("database connected successfully");
