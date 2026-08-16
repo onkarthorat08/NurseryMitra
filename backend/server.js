@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql2/promise");
 const app = express();
 
-const path = require("path");
+const path = require("path"); 
 
 app.use(cors());
 app.use(express.json());
