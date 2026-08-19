@@ -544,12 +544,13 @@ function FarmerViewSaplings() {
 
 
                                     <img
+                                        src={item.image_url}
 
-                                        src={
-                                            `https://nurserymitra.onrender.com/uploads/`
-                                            +
-                                            item.image_url
-                                        }
+                                        // src={
+                                        //     `https://nurserymitra.onrender.com/uploads/`
+                                        //     +
+                                        //     item.image_url
+                                        // }
 
                                         alt={item.sapling_name}
 

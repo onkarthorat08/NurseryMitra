@@ -356,10 +356,11 @@ function ViewSaplings() {
                                         <div className="product-img-wrap">
 
                                             <img
-                                                src={
-                                                    `https://nurserymitra.onrender.com/uploads/`
-                                                    + item.image_url
-                                                }
+                                                // src={
+                                                //     `https://nurserymitra.onrender.com/uploads/`
+                                                //     + item.image_url
+                                                // }
+                                                src={item.image_url}
                                                 alt={item.sapling_name}
                                             />
 

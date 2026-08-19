@@ -96,9 +96,10 @@ function BuySapling() {
 
                 <img
 
-                    src={
-                        `http://localhost:5000/uploads/${sapling.image_url}`
-                    }
+                    // src={
+                    //     `http://localhost:5000/uploads/${sapling.image_url}`
+                    // }
+                    src={sapling.image_url}
 
                     alt="plant"
 

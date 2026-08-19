@@ -303,9 +303,10 @@ function MyOrders() {
 
                                                 <img
 
-                                                    src={
-                                                        `http://localhost:5000/uploads/${order.image_url}`
-                                                    }
+                                                    // src={
+                                                    //     `http://localhost:5000/uploads/${order.image_url}`
+                                                    // }
+                                                    src={order.image_url}
 
                                                     alt="sapling"
 
