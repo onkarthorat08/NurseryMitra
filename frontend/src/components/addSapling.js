@@ -36,7 +36,7 @@ function AddSapling() {
 
     async function sendSapling() {
         try {
-            const res = await axios.post(`http://localhost:5000/add-sapling/${nursery_id}`, formData);
+            const res = await axios.post(`https://nurserymitra.onrender.com/add-sapling/${nursery_id}`, formData);
             console.log(res.data);
             alert("Sapling added successfully!");
             navigate("/view-saplings");

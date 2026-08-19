@@ -68,7 +68,7 @@ function BulkUpload() {
             console.log("Uploading...");
 
             const res = await axios.post(
-                `http://localhost:5000/bulk-upload/${nursery_id}`,
+                `https://nurserymitra.onrender.com/bulk-upload/${nursery_id}`,
                 {
                     saplings: data,
                 }

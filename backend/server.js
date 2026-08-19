@@ -6,21 +6,17 @@ const mysql = require("mysql2/promise");
 require("dotenv").config();
 const app = express();
 
-const path = require("path");
+
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 app.use(cors());
 app.use(express.json());
-
-app.use("/uploads", express.static("uploads"));
 
 let db;
 async function startServer() {
     try {
         db = await mysql.createConnection({
-            // host: "localhost",
-            // user: "root",
-            // password: "omkar@1234",
-            // database: "nurserymitra"
             host: process.env.DB_HOST,
             port: process.env.DB_PORT,
             user: process.env.DB_USER,
@@ -46,23 +42,25 @@ async function startServer() {
 
 startServer();
 
-//setting disk storage for multer
-const storage = multer.diskStorage({
-    //settting dest
-    destination: function (req, file, cb) {
-        cb(null, "uploads");
-    },
-    //setting filename in numeric
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
+// Cloudinary configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Cloudinary storage for Multer
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: "nurserymitra",
+        allowed_formats: ["jpg", "jpeg", "png", "webp"]
     }
 });
 
-//usig created storage for multer
 const upload = multer({
     storage: storage
 });
-
 
 //=====register=====//
 app.post("/register", async (req, res) => {
@@ -83,7 +81,6 @@ app.post("/register", async (req, res) => {
 
         const insertUser = "INSERT INTO users(name,email,phone,password,role) VALUES(?,?,?,?,?)";
         const [userResult] = await db.query(insertUser, [name, email, phone, hashedPass, role]);
-        // res.send("Registration Successfully");
 
         return res.json({
             user_id: userResult.insertId,
@@ -93,9 +90,6 @@ app.post("/register", async (req, res) => {
             hashedPass,
             role
         });
-        alert("User registered successfully!");
-
-
 
     }
     catch (err) {
@@ -173,10 +167,6 @@ app.get("/register", async (req, res) => {
 
 });
 
-// app.listen(5000,()=>{
-//     console.log("server is running on port 5000...");
-// });
-
 
 //================Register Nursery=================//
 app.post("/create-nursery/:user_id", async (req, res) => {
@@ -188,7 +178,6 @@ app.post("/create-nursery/:user_id", async (req, res) => {
         const [result] = await db.query(insertNursery, [user_id, nursery_name, address]);
 
         res.json({ message: "Nursery created successfully!", nursery_id: result.insertId });
-        sessionStorage.setItem("nursery_id", result.insertId);
 
     }
     catch (err) {
@@ -202,7 +191,7 @@ app.post("/add-sapling/:nursery_id", upload.single("image"), async (req, res) =>
     try {
         const { sapling_name, category, description, price, stock } = req.body;
         const nursery_id = req.params.nursery_id;
-        const image = req.file.filename;
+        const image = req.file ? req.file.path : null;
 
         const insertSapling = "INSERT INTO saplings(nursery_id, sapling_name, category, description, price, stock, image_url) VALUES(?,?,?,?,?,?,?)";
 
@@ -214,53 +203,6 @@ app.post("/add-sapling/:nursery_id", upload.single("image"), async (req, res) =>
         res.status(500).json({ message: err.message });
     }
 });
-
-
-
-// //====================view saplings================//
-// app.get("/view-saplings/:nursery_id", async (req, res) => {
-//     try {
-
-//         const nursery_id = req.params.nursery_id;
-
-//         const page = Number(req.query.page) || 1;
-//         const limit = Number(req.query.limit) || 5;
-
-//         const offset = (page - 1) * limit;
-
-//         const countQuery =
-//             "SELECT COUNT(*) AS total FROM saplings WHERE nursery_id=?";
-
-//         const [countResult] = await db.query(countQuery, [nursery_id]);
-
-//         const total = countResult[0].total;
-//         const totalPages = Math.ceil(total / limit);
-
-//         const sql =
-//             "SELECT * FROM saplings WHERE nursery_id=? LIMIT ? OFFSET ?";
-
-//         const [saplings] = await db.query(sql, [
-//             nursery_id,
-//             limit,
-//             offset
-//         ]);
-
-//         res.json({
-//             data: saplings,
-//             total,
-//             page,
-//             limit,
-//             totalPages
-//         });
-
-//     } catch (err) {
-//         res.status(500).json({
-//             message: err.message
-//         });
-//     }
-// });
-
-
 
 
 //====================view saplings================//
@@ -327,11 +269,19 @@ app.put("/edit-sapling/:sapling_id", upload.single("image"), async (req, res) =>
         const { nursery_id, sapling_name, category, description, price, stock } = req.body;
         const sapling_id = req.params.sapling_id;
 
-        const image = req.file ? req.file.filename : null;
+        const image = req.file ? req.file.path : null;
 
-        const updateSapling = "UPDATE saplings SET sapling_name = ?, category = ?, description = ?, price = ?, stock = ?, image_url = ? WHERE nursery_id = ? AND sapling_id = ?";;
+        // Only overwrite image_url if a new image was actually uploaded,
+        // otherwise keep the existing Cloudinary URL as-is.
+        const updateSapling = image
+            ? "UPDATE saplings SET sapling_name = ?, category = ?, description = ?, price = ?, stock = ?, image_url = ? WHERE nursery_id = ? AND sapling_id = ?"
+            : "UPDATE saplings SET sapling_name = ?, category = ?, description = ?, price = ?, stock = ? WHERE nursery_id = ? AND sapling_id = ?";
 
-        const [result] = await db.query(updateSapling, [sapling_name, category, description, price, stock, image, nursery_id, sapling_id]);
+        const params = image
+            ? [sapling_name, category, description, price, stock, image, nursery_id, sapling_id]
+            : [sapling_name, category, description, price, stock, nursery_id, sapling_id];
+
+        const [result] = await db.query(updateSapling, params);
 
         console.log(result);
 
@@ -349,209 +299,6 @@ app.put("/edit-sapling/:sapling_id", upload.single("image"), async (req, res) =>
         })
     }
 });
-
-
-// //===show saplings for farmer=============//
-// app.get("/saplings", async (req, res) => {
-//     try {
-//         const page = parseInt(req.query.page) || 1;
-//         const limit = 8;
-//         const offset = (page - 1) * limit;
-
-//         const totalQuery = `
-//             SELECT COUNT(*) AS total
-//             FROM saplings
-//             WHERE stock > 0
-//         `;
-
-//         const [totalRows] = await db.query(totalQuery);
-//         const total = totalRows[0].total;
-
-//         const query = `
-//             SELECT
-//                 s.sapling_id,
-//                 s.sapling_name,
-//                 s.category,
-//                 s.description,
-//                 s.price,
-//                 s.stock,
-//                 s.image_url,
-//                 n.nursery_name,
-//                 n.address
-//             FROM saplings s
-//             JOIN nurseries n
-//                 ON s.nursery_id = n.nursery_id
-//             WHERE s.stock > 0
-//             ORDER BY s.sapling_id DESC
-//             LIMIT ? OFFSET ?
-//         `;
-
-//         const [rows] = await db.query(query, [limit, offset]);
-
-//         res.json({
-//             saplings: rows,
-//             currentPage: page,
-//             totalPages: Math.ceil(total / limit)
-//         });
-
-//     } catch (err) {
-//         res.status(500).json({
-//             message: err.message
-//         });
-//     }
-// });
-
-
-
-// // ================= Show Saplings Search + Category + Pagination =================
-
-// app.get("/saplings", (req, res) => {
-
-
-//     const page = Number(req.query.page) || 1;
-
-//     const limit = Number(req.query.limit) || 8;
-
-
-//     const offset = (page - 1) * limit;
-
-
-
-//     let search = req.query.search || "%";
-
-//     let category = req.query.category || "";
-
-
-
-//     search = `%${search}%`;
-
-//     category = category ? category : "%";
-
-
-
-
-//     const countQuery = `
-
-//         SELECT COUNT(*) AS total
-
-//         FROM saplings s
-
-//         WHERE s.stock > 0
-
-//         AND s.sapling_name LIKE ?
-
-//         AND s.category LIKE ?
-
-//     `;
-
-
-
-//     db.query(
-
-//         countQuery,
-
-//         [
-//             search,
-//             category
-//         ],
-
-//         (err, countResult) => {
-
-
-//             if (err)
-//                 return res.send(err);
-
-
-
-//             const total = countResult[0].total;
-
-
-//             const totalPages = Math.ceil(total / limit);
-
-
-
-
-
-//             const sql = `
-//                 SELECT
-//                     s.sapling_id,
-//                     s.sapling_name,
-//                     s.category,
-//                     s.description,
-//                     s.price,
-//                     s.stock,
-//                     s.image_url,
-//                     n.nursery_name,
-//                     n.address
-//                 FROM saplings s
-//                 JOIN nurseries n
-//                 ON s.nursery_id=n.nursery_id
-//                 WHERE s.stock > 0
-//                 AND s.sapling_name LIKE ?
-//                 AND s.category LIKE ?
-//                 ORDER BY s.sapling_id DESC
-//                 LIMIT ? OFFSET ?
-//             `;
-
-
-
-//             db.query(
-
-//                 sql,
-
-//                 [
-
-//                     search,
-
-//                     category,
-
-//                     limit,
-
-//                     offset
-
-//                 ],
-
-//                 (err, result) => {
-
-
-//                     if (err)
-
-//                         return res.send(err);
-
-
-
-//                     res.json({
-
-//                         data: result,
-
-//                         total,
-
-//                         page,
-
-//                         limit,
-
-//                         totalPages
-
-//                     });
-
-
-
-//                 }
-
-
-//             );
-
-
-
-//         }
-
-
-//     );
-
-
-// });
-
-
 
 
 // ================= Show Saplings Search + Category + Pagination =================
@@ -882,14 +629,13 @@ app.get("/farmer-orders/:farmer_id", async (req, res) => {
 
 
 //====================delete sapling================//
-const fs = require("fs");
 
 app.delete("/delete-sapling/:sapling_id", async (req, res) => {
     try {
 
         const { sapling_id } = req.params;
 
-        // get the sapling first, so we know which image file to remove
+        // get the sapling first, so we know which Cloudinary image to remove
         const [rows] = await db.query(
             "SELECT image_url FROM saplings WHERE sapling_id = ?",
             [sapling_id]
@@ -908,12 +654,20 @@ app.delete("/delete-sapling/:sapling_id", async (req, res) => {
             [sapling_id]
         );
 
-        // remove the image file from disk, if it exists
+        // remove the image from Cloudinary, if it exists
         if (image_url) {
-            const imagePath = path.join("uploads", image_url);
-            fs.unlink(imagePath, (err) => {
-                if (err) console.log("Image delete failed:", err.message);
-            });
+            try {
+                // Cloudinary URLs look like:
+                // https://res.cloudinary.com/<cloud_name>/image/upload/v12345/nurserymitra/abc123.jpg
+                // public_id is "nurserymitra/abc123" (folder + filename, no extension, no version)
+                const afterUpload = image_url.split("/upload/")[1]; // "v12345/nurserymitra/abc123.jpg"
+                const withoutVersion = afterUpload.split("/").slice(1).join("/"); // "nurserymitra/abc123.jpg"
+                const publicId = withoutVersion.replace(/\.[^/.]+$/, ""); // "nurserymitra/abc123"
+
+                await cloudinary.uploader.destroy(publicId);
+            } catch (cloudErr) {
+                console.log("Cloudinary image delete failed:", cloudErr.message);
+            }
         }
 
         res.json({

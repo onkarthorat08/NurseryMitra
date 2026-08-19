@@ -59,12 +59,12 @@ function FarmerViewSaplings() {
 
             try {
                 console.log(
-                    `http://localhost:5000/saplings?page=${page}&search=${search}&category=${category}`
+                    `https://nurserymitra.onrender.com/saplings?page=${page}&search=${search}&category=${category}`
                 );
 
                 const res = await axios.get(
 
-                    `http://localhost:5000/saplings?page=${page}&search=${search}&category=${category}`
+                    `https://nurserymitra.onrender.com/saplings?page=${page}&search=${search}&category=${category}`
 
                 );
 
@@ -546,7 +546,7 @@ function FarmerViewSaplings() {
                                     <img
 
                                         src={
-                                            `http://localhost:5000/uploads/`
+                                            `https://nurserymitra.onrender.com/uploads/`
                                             +
                                             item.image_url
                                         }

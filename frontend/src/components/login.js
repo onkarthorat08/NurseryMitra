@@ -32,7 +32,7 @@ function Login() {
         }
         try {
             console.log("sending to backend...");
-            const res = await axios.post('http://localhost:5000/login', {
+            const res = await axios.post('https://nurserymitra.onrender.com/login', {
                 email, enteredPassword
             });
             console.log(res.data);

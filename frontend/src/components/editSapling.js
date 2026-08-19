@@ -42,7 +42,7 @@ function EditSapling() {
 
     async function sendSapling() {
         try {
-            const res = await axios.put(`http://localhost:5000/edit-sapling/${sapling_id}`, formData);
+            const res = await axios.put(`https://nurserymitra.onrender.com/edit-sapling/${sapling_id}`, formData);
             console.log(res.data);
             alert("Sapling updated successfully!");
             navigate("/view-saplings");

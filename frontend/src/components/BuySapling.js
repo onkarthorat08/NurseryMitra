@@ -53,7 +53,7 @@ function BuySapling() {
 
 
         await axios.post(
-            "http://localhost:5000/create-order",
+            "https://nurserymitra.onrender.com/create-order",
             {
 
                 farmer_id: farmer_id,

@@ -30,7 +30,7 @@ function CreateNursery() {
         }
 
         try{
-            const response = await axios.post(`http://localhost:5000/create-nursery/${user_id}`, {
+            const response = await axios.post(`https://nurserymitra.onrender.com/create-nursery/${user_id}`, {
                 nursery_name, address
             });
             sessionStorage.setItem("nursery_id", response.data.nursery_id);

@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
     FiHome,
     FiSun,
-    FiPackage,
+    // FiPackage,
     FiLogOut,
     FiPlusCircle,
     FiUploadCloud,
@@ -41,7 +41,7 @@ function ViewSaplings() {
         setLoading(true);
 
         axios.get(
-            `http://localhost:5000/view-saplings/${nursery_id}?page=${page}&limit=${limit}`
+            `https://nurserymitra.onrender.com/view-saplings/${nursery_id}?page=${page}&limit=${limit}`
         )
             .then((res) => {
 
@@ -81,7 +81,7 @@ function ViewSaplings() {
 
         try {
 
-            await axios.delete(`http://localhost:5000/delete-sapling/${sapling_id}`);
+            await axios.delete(`https://nurserymitra.onrender.com/delete-sapling/${sapling_id}`);
 
             alert("Sapling deleted successfully");
 
@@ -357,7 +357,7 @@ function ViewSaplings() {
 
                                             <img
                                                 src={
-                                                    `http://localhost:5000/uploads/`
+                                                    `https://nurserymitra.onrender.com/uploads/`
                                                     + item.image_url
                                                 }
                                                 alt={item.sapling_name}
