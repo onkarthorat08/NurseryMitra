@@ -8,7 +8,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
     FiHome,
     FiSun,
-    FiPackage,
+    // FiPackage,
     FiLogOut,
     FiPlusCircle,
     FiUploadCloud,
