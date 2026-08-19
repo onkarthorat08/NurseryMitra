@@ -25,7 +25,7 @@ function BuySapling() {
             try {
 
                 const res = await axios.get(
-                    `http://localhost:5000/sapling/${sapling_id}`
+                    `https://nurserymitra.onrender.com/sapling/${sapling_id}`
                 );
 
                 setSapling(res.data);

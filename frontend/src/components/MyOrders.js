@@ -37,7 +37,7 @@ function MyOrders() {
 
                 const res = await axios.get(
 
-                    `http://localhost:5000/farmer-orders/${farmer_id}`
+                    `https://nurserymitra.onrender.com/farmer-orders/${farmer_id}`
 
                 );
 
