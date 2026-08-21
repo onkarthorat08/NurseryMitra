@@ -239,7 +239,8 @@ app.get("/view-saplings/:nursery_id", async (req, res) => {
             FROM saplings
             JOIN nurseries ON saplings.nursery_id = nurseries.nursery_id
             WHERE saplings.nursery_id = ?
-            LIMIT ? OFFSET ?
+ORDER BY saplings.sapling_id DESC
+LIMIT ? OFFSET ?
         `;
 
         const [saplings] = await db.query(sql, [
